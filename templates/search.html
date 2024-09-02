@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} About {% endblock title %}
+{% block body %}
+<br>
+
+<h2 class="text-center bg-dark text-success">Your Search results......</h2>
+
+<br />
+{% if allItems|length < 1 %}
+    <h1>Your Search did not match <span class="badge bg-secondary">Try Again</span></h1>
+    <ul>
+        <li>Make Sure You have Spelled Correct</li>
+    </ul>
+{% endif %}
+
+<br />
+
+<div class="container mt-2">
+    <div class="row">
+        {% for item in Prod %}
+            <div class="col-md-4 bg-light p-5">
+                <div class="card" style="width: 20rem;">
+                    <img src="{{ item.sell_image.url }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h6 class="card-title display-4 text-primary">{{ item.sell_name }}</h6> 
+                        <p class="text-success bg-light">Price: {{ item.sell_price }} Rs</p>
+                        <p class="card-text">{{ item.sell_description }}</p>
+                        <p class="text-danger"><b>Sell By: {{ item.sell_by }}</b></p>
+                        <a href="/orders" class="btn btn-outline-success btn-lg">Order Now</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

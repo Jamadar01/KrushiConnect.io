@@ -1,0 +1,187 @@
+{% load static %}
+
+<body>
+  <link rel="stylesheet" href="{% static 'css/Sell.css' %}">
+  <img class="im2" src="{% static 'images/background.jpg' %}" alt="im2">
+  <div class="sell-head">
+    <div class="centered-box-pinfo">
+      <div class="inner-box-pinfo">
+        <form action="/sell" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group-pinfo">
+            <label for="category" style="font-weight: bold;">Category</label>
+            <input class="form-control me-2" type="search" id="category1" aria-label="Search" name="sell_category" required>
+            <!-- <input class="form-control me-2 category-pinfo" type="search" id="category" name="sell_category"> -->
+            <button class="recordButton" id="recordButton1" data-target="category">Start Recording</button>
+            <p id="output"></p>
+          </div>
+          <div class="form-group-pinfo">
+            <label for="username" style="font-weight: bold;">Product Name</label>
+            <input class="form-control me-2" type="search" id="username" aria-label="Search" name="sell_name" required>
+            <!-- <input class="name-pinfo" type="text" id="username" name="sell_name"> -->
+            <button class="recordButton" id="recordButton2" data-target="username">Start Recording</button>
+          </div>
+           <div class="form-group-pinfo">
+    <label for="product_image" style="font-weight: bold;">Product Image</label>
+    <input class="image-pinfo" type="file" id="product_image" name="sell_image">
+</div>
+<div class="form-group-pinfo">
+    <label for="product_price" style="font-weight: bold;">Product Price</label>
+    <input class="form-control me-2" type="search" id="product_price" aria-label="Search" name="sell_price" required>
+    <!-- <input class="price-pinfo" type="search" id="product_price" name="sell_price"> -->
+    <button id="recordButton3">Start Recording</button>
+</div>
+<div class="form-group-pinfo">
+    <label for="product_info" style="font-weight: bold;">Product Information</label>
+    <textarea class="info-pinfo" id="product_info" name="sell_description"  required></textarea>
+    <button id="recordButton4">Start Recording</button>
+</div>   
+          <div class="a-pinfo">
+            <button type="submit" class="submit-pinfo">Save Details</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+
+ 
+  
+  <script>
+    const recordButton = document.getElementById('recordButton1');
+    const output = document.querySelector('input[id ="category1"]');
+    recordButton.addEventListener('click', async () => {
+      const language = prompt('Select a language: Enter "en" for English or "hi" for Hindi');
+      
+      if (language === 'en' || language === 'hi') {
+        output.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/recognize_speech/');
+          const data = await response.json();
+          output.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+      if (language === 'hi') {
+        output.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/hindi/');
+          const data = await response.json();
+          output.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+    });
+
+    const recordButton1 = document.getElementById('recordButton2');
+    const output1 = document.querySelector('input[id="username"]');
+    recordButton1.addEventListener('click', async () => {
+      const language = prompt('Select a language: Enter "en" for English or "hi" for Hindi');
+      
+      if (language === 'en' || language === 'hi') {
+        output1.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/recognize_speech/');
+          const data = await response.json();
+          output1.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output1.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output1.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+      if (language === 'hi') {
+        output1.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/hindi/');
+          const data = await response.json();
+          output1.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output1.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output1.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+    });
+
+    const recordButton2 = document.getElementById('recordButton3');
+    const output2 = document.querySelector('input[id="product_price"]');
+    recordButton2.addEventListener('click', async () => {
+      const language = prompt('Select a language: Enter "en" for English or "hi" for Hindi');
+      
+      if (language === 'en' || language === 'hi') {
+        output2.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/recognize_speech/');
+          const data = await response.json();
+          output2.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output2.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output2.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+      if (language === 'hi') {
+        output2.placeholder = 'Listening...';
+        
+        try {
+          const response = await fetch('/hindi/');
+          const data = await response.json();
+          output2.value = ` ${data.text}`;
+        } catch (error) {
+          console.error('Error:', error);
+          output1.placeholder = 'Error occurred during recognition.';
+        }
+      } else {
+        output2.placeholder = 'Invalid language selected';
+        // Handle the case where an invalid language is entered
+      }
+    });
+    const recordButton3 = document.getElementById('recordButton4');
+const output3 = document.querySelector('textarea[id="product_info"]');
+recordButton3.addEventListener('click', async () => {
+  const language = prompt('Select a language: Enter "en" for English or "hi" for Hindi');
+  
+  if (language === 'en' || language === 'hi') {
+    output3.placeholder = 'Listening...';
+    
+    try {
+      let endpoint = language === 'hi' ? '/hindi/' : '/recognize_speech/';
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      output3.value = ` ${data.text}`;
+    } catch (error) {
+      console.error('Error:', error);
+      output3.placeholder = 'Error occurred during recognition.';
+    }
+  } else {
+    output3.placeholder = 'Invalid language selected';
+    // Handle the case where an invalid language is entered
+  }
+});
+
+  </script>
+  </script>
+</body>

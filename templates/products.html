@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Products {% endblock title %}
+{% block body %}
+
+<div class="container mt-2">
+  <h2 class="display-4 text-success text-center"> Products</h2>
+  <hr>
+
+  {% for category, products in grouped_products.items %}
+      <h3>{{ category }}</h3>
+      <div class="row">
+          {% for product in products %}
+              <div class="col-md-4 bg-light p-5">
+                  <div class="card" style="width: 20rem;">
+                      {% if product.sell_image %}
+                          <img src="{{ product.sell_image.url }}" class="card-img-top" alt="...">
+                      {% else %}
+                          <img src="/path/to/default/image.jpg" class="card-img-top" alt="Default Image">
+                      {% endif %}
+                      <div class="card-body">
+                          <h6 class="card-title display-4 text-primary">{{ product.sell_name }}</h6>
+                          <p class="text-success bg-light">Price: {{ product.sell_price }} Rs</p>
+                          <p class="card-text">{{ product.sell_description }}</p>
+                          <a href="/orders" class="btn btn-outline-success btn-lg">Order Now</a>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+      {% endfor %}
+
+{% endblock body %}
