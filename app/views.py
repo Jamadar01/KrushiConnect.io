@@ -223,10 +223,10 @@ def farmerLogin(request):
     return render(request, "farmer.html")
 
 def HandleLogout(request):
-    logout(request)
+    
     user.status=False
     user.save()
-    
+    logout(request)
     messages.warning(request,"Logout")
     return redirect("/login")
 
