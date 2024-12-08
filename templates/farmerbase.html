@@ -30,42 +30,25 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
-              {% if farmer.role == "farmer" %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/sell">Sell</a>
               </li>
-              {%endif%}
-              {% if user.role == "customer" %}
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/products">Products</a>
-              </li>
-              {%endif%}
+
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/orders">Order</a>
               </li>
-
-             
               
               <li class="nav-item">
                 <a class="nav-link active" href="contact">Contact</a>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link active" href="/about">About</a>
+                <a class="nav-link active" href="about">About</a>
               </li>
-              {% if farmer.role == "farmer" %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'view_user_profile' farmer.email %}">Profile</a>
-              </li>
-              {%endif%}
-              {% if user.role == "customer" %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'view_user_profile' user.email %}">Profile</a>
-              </li>
-              {%endif%}
 
 
   {% if request.user.is_authenticated %}
@@ -79,6 +62,7 @@
       <li><a class="dropdown-item" href="logout">Logout</a></li>
     </ul>
   </li>
+
   {% else %}
 
               <li class="nav-item dropdown">
@@ -86,8 +70,8 @@
                   New User?
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="/signup">Sign Up</a></li>
-                  <li><a class="dropdown-item" href="/login">Login</a></li>
+                  <li><a class="dropdown-item" href="signup">Sign Up</a></li>
+                  <li><a class="dropdown-item" href="login">Login</a></li>
                 </ul>
               </li>
 
@@ -95,12 +79,12 @@
 
              
             </ul>
-            <span>
             <form action="/search" method="get" class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="getdata" required>
               <button class="btn btn-outline-success" type="submit">Search</button>
               <button id="recordButton">Start Recording</button>
             </form>
+          
             <!-- Script for speech recognition -->
             <script>
               const recordButton = document.getElementById('recordButton');
@@ -140,7 +124,8 @@
                 }
               });
             </script>
-            </span>
+              
+            
           </div>
         </div>
       </nav>

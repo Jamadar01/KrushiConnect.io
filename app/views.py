@@ -5,18 +5,24 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
-from app.models import Contact,Medicines,ProductItems,MyOrders,Sell,FarmerProfile,customerProfile
+from app.models import Contact,Medicines,ProductItems,MyOrders,Sell,FarmerProfile,customerProfile,myCart,Feedback
 import speech_recognition as sr
 from django.http import JsonResponse
 import json
 import math
+from django.shortcuts import render, get_object_or_404
 user=None
 Farmer=None
 is_loggedin=False
+
 def Home(request):
     mymed=Medicines.objects.all()
     myprod=ProductItems.objects.all()
-    context={"mymed":mymed,"myprod":myprod}
+    context={"mymed":mymed,
+             "myprod":myprod,
+             "user":user,
+             "farmer":Farmer
+            }
     return render(request, "Home.html",context)
 
 
@@ -223,9 +229,9 @@ def farmerLogin(request):
     return render(request, "farmer.html")
 
 def HandleLogout(request):
-    
-    user.status=False
-    user.save()
+    if user and user.status:
+      user.status=False
+      user.save()
     logout(request)
     messages.warning(request,"Logout")
     return redirect("/login")
@@ -233,7 +239,10 @@ def HandleLogout(request):
 
 def medicines(request):
     mymed=Medicines.objects.all()
-    context={"mymed":mymed}
+    context={"mymed":mymed,
+             "user":user,
+             "farmer":Farmer
+             }
     # print(context)
     return render(request,"medicines.html",context)
 
@@ -253,7 +262,10 @@ def products(request):
         products = Sell.objects.filter(sell_category=category['sell_category'])
         grouped_products[category['sell_category']] = products
 
-    context = {"grouped_products": grouped_products}
+    context = {"grouped_products": grouped_products,
+               "user":user,
+               "farmer":Farmer
+               }
     return render(request, "products.html", context)
 
 
@@ -277,11 +289,13 @@ def myorders(request):
     # i am fetching the data from table MyOrders based on emailid
     items=MyOrders.objects.filter(email=current_user)
     # print(items)
-    context={"myprod":myprod,"mymed":mymed,"items":items}
+    context={"myprod":myprod,"mymed":mymed,"items":items,
+             "user":user,
+             "farmer":Farmer}
     if request.method =="POST":
-        name=request.POST.get("name")
-        print(name)
-        email=request.POST.get("email")
+        name=request.user.email
+        email = request.user.username
+        print("email",email)
         item=request.POST.get("items")
         quan=request.POST.get("quantity")
         address=request.POST.get("address")
@@ -366,6 +380,8 @@ def search(request):
     context = {
         "Prod": sorted_products,
         "allItems": sorted_products,
+        "user":user,
+        "farmer":Farmer
     }
     
     return render(request, "search.html", context)
@@ -442,7 +458,138 @@ def sell(request):
             
     return render(request, "sell.html")
 
+def product_detail(request,id):
+    product = Sell.objects.get(id=id)
+    feedbacks = Feedback.objects.filter(product=product)
+    return render(request, 'product_detail.html',{'product': product,'feedbacks': feedbacks})
 
+
+def add_to_cart(request,id):
+    product=Sell.objects.get(id=id)
+    myquery=myCart(
+        id=product.id,
+        name=product.sell_name,
+        price=product.sell_price,
+        status=True
+    )
+    myquery.save()
+    messages.info(request, "Sell details saved successfully!")
+    return render(request, 'product_detail.html',{'product': product})
+    
+def viewCart(request):
+    data=myCart.objects.all()
+    return render(request, 'viewCart.html',{'data':data})
+
+def add_feedback(request,id):
+    if request.method == "POST":
+        product = Sell.objects.get(id=id)
+        comment = request.POST['comment']
+        Feedback.objects.create(product=product, user=request.user, comment=comment)
+        return redirect('product_detail', id=id)  
+
+def userProfile(request):
+    context={
+             "user":user,
+             "farmer":Farmer
+            }
+    print(context)
+    return render(request, "userProfile.html",context)
+
+def saveProfileChanges(request):
+    print("profilenot saved")
+    if request.method == "POST":
+        email = request.POST.get("email")
+        firstname = request.POST.get("firstname")
+        lastname = request.POST.get("lastname")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+        usernew=''
+        print(email,firstname,lastname,phone,address)
+        for item in customerProfile:
+          if(item.email==email):
+            usernew=item(firstname=firstname,
+                                    lastname=lastname,
+                                    phone_number=phone,
+                                    location=address)
+            usernew.save()
+        for item in FarmerProfile:
+          if(item.email==email):
+            usernew=item(firstname=firstname,
+                                    lastname=lastname,
+                                    phone_number=phone,
+                                    location=address)
+            usernew.save()
+    context={
+             "user":user,
+             "farmer":Farmer
+            }
+    return render(request, "userProfile.html",context) 
+    
+
+def viewUserProfile(request, email):
+    print(f"Looking up profile for email: {email}")
+    global user
+    user=None
+    global Farmer
+    Farmer=None
+    userProfile=None
+    # Try to find a matching CustomerProfile
+    if customerProfile.objects.filter(email=email).exists():
+        user = customerProfile.objects.get(email=email)
+        userProfile=user
+
+    # Check if the email exists in FarmerProfile
+    elif FarmerProfile.objects.filter(email=email).exists():
+        Farmer = FarmerProfile.objects.get(email=email)
+        userProfile=Farmer
+    # Prepare context for rendering
+    context = {
+        "userProfile":userProfile,
+        "user": user,
+        "farmer":Farmer  # The profile found
+    }
+    print(f"Looking up profile for email: {context}")
+    return render(request, "userProfileView.html", context)
+
+def editUserProfile(request, email):
+    global user
+    user=None
+    global Farmer
+    Farmer=None
+    global userProfile
+    userProfile=None
+    # Try to find a matching CustomerProfile
+    if customerProfile.objects.filter(email=email).exists():
+        user = customerProfile.objects.get(email=email)
+        userProfile=user
+
+    # Check if the email exists in FarmerProfile
+    elif FarmerProfile.objects.filter(email=email).exists():
+        Farmer = FarmerProfile.objects.get(email=email)
+        userProfile=Farmer
+    if request.method == "POST":
+        firstname = request.POST.get("firstname")
+        lastname = request.POST.get("lastname")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+
+        # Update the profile fields
+        userProfile.firstname = firstname
+        userProfile.lastname = lastname
+        userProfile.phone_number = phone
+        userProfile.location = address
+        userProfile.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect("view_user_profile", email=email)  # Redirect to view profile after updating
+
+    # For GET request, render the edit form with current profile data
+    context = {
+        "userProfile": userProfile,
+        "user":user,
+        "farmer":Farmer
+        }
+    return render(request, "userProfileEdit.html", context)
 #voicerecorder
 def voice_recognition(request):
     return render(request, 'voice_recognition.html')
@@ -510,3 +657,4 @@ def hindi_recognition(request):
             return "Error occurred during speech recognition."
 
     return JsonResponse({'text': MicExecution()})
+

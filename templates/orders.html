@@ -17,7 +17,7 @@ Order-Products/Medicines
       <form action="orders" method="post">
         {% csrf_token %}
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="name">Full Name</label>
           <input
             type="text"
@@ -28,8 +28,8 @@ Order-Products/Medicines
             value="{{user.first_name}} {{user.last_name}}"
             required
           />
-        </div>
-        <div class="form-group">
+        </div> -->
+        <!-- <div class="form-group">
           <label for="name">Email</label>
           <input
             type="text"
@@ -39,7 +39,7 @@ Order-Products/Medicines
             value="{{user.username}}"
             required
           />
-        </div>
+        </div> -->
 
         <div class="form-group">
             <label for="items">Select Medicines/Products</label>
@@ -85,7 +85,6 @@ Order-Products/Medicines
               id="address"
               name="address"
               class="form-control mb-3"
-           
               required
             /></textarea>
           </div>

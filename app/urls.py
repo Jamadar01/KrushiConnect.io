@@ -19,8 +19,12 @@ urlpatterns = [
     path('recognize_speech/', views.recognize_speech, name='recognize_speech'),
     path('hindi/', views.hindi_recognition, name='hindi_recognition'),
     path("orders/<id>",views.deleteOrder,name="deleteOrder"),
-    
-
+    path('productDetailPage/<id>', views.product_detail, name='product_detail'),
+    path('addToCart/<id>', views.add_to_cart, name='add_to_cart'),
+    path('viewCart/', views.viewCart, name='viewCart'),
+    path('add_feedback/<id>', views.add_feedback, name='add_feedback'),
+    path('userProfile/<str:email>', views.viewUserProfile, name='view_user_profile'),
+    path('userProfile/edit/<str:email>', views.editUserProfile, name='edit_user_profile'),
 
 
 ]

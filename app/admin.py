@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contact,Medicines,ProductItems,MyOrders,Sell,FarmerProfile,customerProfile
+from .models import Contact,Medicines,ProductItems,MyOrders,Sell,FarmerProfile,customerProfile,myCart,Feedback
 from django.contrib.auth.models import Group
 
 # Create the groups
@@ -14,3 +14,5 @@ admin.site.register(MyOrders)
 admin.site.register(Sell)
 admin.site.register(FarmerProfile)
 admin.site.register(customerProfile)
+admin.site.register(myCart)
+admin.site.register(Feedback)

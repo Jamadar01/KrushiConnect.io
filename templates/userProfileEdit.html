@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Customer Profile -->
+        {% if user.role == "customer" %}
+        <div id="customer-profile">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="firstname" class="form-control" value="{{ user.firstname }}">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="lastname" class="form-control" value="{{ user.lastname }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone_number }}">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" class="form-control">{{ user.address }}</textarea>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Farmer Profile -->
+        {% if farmer.role == "farmer" %}
+        <div id="farmer-profile">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="firstname" class="form-control" value="{{ farmer.firstname }}">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="lastname" class="form-control" value="{{ farmer.lastname }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{ farmer.email }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" class="form-control" value="{{ farmer.phone_number }}">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" class="form-control">{{ farmer.address }}</textarea>
+            </div>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+        <a href="{% url 'view_user_profile' userProfile.username %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock body %}
