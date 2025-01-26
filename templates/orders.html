@@ -45,9 +45,9 @@ Order-Products/Medicines
             <label for="items">Select Medicines/Products</label>
             <select id="items" class="form-control" name="items">
               <option selected>Choose...</option>
-              {% for j in myprod%}
+              {% for j in mysell%}
               
-              <option value="{{j.prod_name}}">{{j.prod_name}}</option>
+              <option value="{{j.sell_name}}">{{j.sell_name}}</option>
               {% endfor %}
             </select>
           </div>
@@ -119,7 +119,7 @@ Order-Products/Medicines
         <thead>
           <tr>
             <th scope="col">Order ID</th>
-            <th scope="col">Name</th>
+            <!-- <th scope="col">Name</th> -->
             <th scope="col">Products</th>
             <th scope="col">Price</th>
             <th scope="col">Cancel</th>
@@ -132,9 +132,9 @@ Order-Products/Medicines
           {% for item in items %}
           <tr>
             <th scope="row">{{item.id}}</th>
-            <td>{{item.name}}</td>
+            <!-- <td>{{item.name}}</td> -->
             <td>{{item.items}}</td>
-            <td>{{item.price}} {{item.delivery}}</td>
+            <td>{{item.price}}</td>
            {% if item.delivery %}
            <td><button type="button" class="btn-success p-2"  href="/orders/{{item.id}}" disabled> <i class="fa-solid fa-trash-can"></i></button></td>
            
