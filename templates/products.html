@@ -11,18 +11,35 @@
       <div class="row">
           {% for product in products %}
               <div class="col-md-4 bg-light p-5">
-                  <div class="card" style="width: 20rem;">
+                  <div class="card" style="width: 20rem; height: 30rem;">
                       {% if product.sell_image %}
-                          <img src="{{ product.sell_image.url }}" class="card-img-top" alt="...">
+                          <!-- <img src="{{ product.sell_image.url }}" class="card-img-top" alt="..."> -->
+                          <img src="{{ product.sell_image.url }}" class="card-img-top" alt="..." style="width: 100%; height: 200px; object-fit: cover;">
+
                       {% else %}
-                          <img src="/path/to/default/image.jpg" class="card-img-top" alt="Default Image">
+                          <img src="/path/to/default/image.jpg" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;" alt="Default Image">
                       {% endif %}
                       <div class="card-body">
                           <h6 class="card-title display-4 text-primary">{{ product.sell_name }}</h6>
-                          <p class="text-success bg-light">Price: {{ product.sell_price }} Rs</p>
+                          <p class="text-success bg-light">
+                            Price: Rs. {{ product.sell_price }} 
+                            {% if product.sell_name == 'Banana' %}
+                              per dozen
+                            {% else %}
+                              per Kg
+                            {% endif %}
+                          </p>
+                          
                           <p class="card-text">{{ product.sell_description }}</p>
+                          <!-- <span>
                           <a href="/orders" class="btn btn-outline-success btn-lg">Order Now</a>
                           <a href="/productDetailPage/{{product.id}}" class="btn btn-outline-success btn-lg">View Product</a>
+                        </span> -->
+                        <span class="d-inline-flex gap-2">
+                            <a href="/orders" class="btn btn-outline-success btn-lg">Order Now</a>
+                            <a href="/productDetailPage/{{product.id}}" class="btn btn-outline-success btn-lg">View Product</a>
+                          </span>
+                          
                       </div>
                   </div>
               </div>

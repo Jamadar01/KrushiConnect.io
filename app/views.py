@@ -280,7 +280,7 @@ def myorders(request):
     #     return redirect("/login")
     
     print(request.user)
-    mymed=Sell.objects.all()
+    mysell=Sell.objects.all()
     myprod=ProductItems.objects.all()
     
     # i am writing a logic to get the user details orders
@@ -289,7 +289,7 @@ def myorders(request):
     # i am fetching the data from table MyOrders based on emailid
     items=MyOrders.objects.filter(email=current_user)
     # print(items)
-    context={"myprod":myprod,"mymed":mymed,"items":items,
+    context={"myprod":myprod,"mysell":mysell,"items":items,
              "user":user,
              "farmer":Farmer}
     if request.method =="POST":
@@ -303,10 +303,10 @@ def myorders(request):
         print(name,email,item,quan,address,phone)
         
         price=""
-        for i in mymed:
+        for i in mysell:
             if item==i.sell_name:
                 price=i.sell_price
-
+                print(price)
             pass
         for i in myprod:
             if i.prod_name==item:
@@ -315,6 +315,7 @@ def myorders(request):
             pass
 
         newPrice=int(price)*int(quan)
+        print(newPrice)
         myquery=MyOrders(name=name,email=email,items=item,address=address,quantity=quan,price=newPrice,phone_num=phone)
         myquery.save()
         messages.info(request,f"Order is Successfull")
